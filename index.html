@@ -16,7 +16,8 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-y: auto;
+      position: relative;
     }
 
     .card {
@@ -28,7 +29,8 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      z-index: 10;
+      height: auto;
+      z-index: 1;
     }
 
     .slideshow {
@@ -116,49 +118,32 @@
       margin-top: 10px;
     }
 
-    .balloons {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
+    /* 🎈 Balloon Styles */
     .balloon {
-      position: absolute;
-      width: 40px;
-      height: 60px;
-      background: radial-gradient(circle at 30% 30%, #ff5f6d, #ffc371);
-      border-radius: 50% 50% 45% 45%;
+      position: fixed;
+      bottom: -100px;
+      width: 50px;
+      height: 70px;
+      background: radial-gradient(circle, #ff69b4 20%, #ff1493 100%);
+      border-radius: 50% 50% 50% 50%;
+      animation: floatUp 10s linear infinite;
       opacity: 0.8;
+      z-index: 0;
     }
 
     @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-    }
-
-    @keyframes floatLeftToRight {
-      0% { transform: translateX(-100vw); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateX(100vw); opacity: 0; }
-    }
-
-    @keyframes floatZigzag {
-      0% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-30vh) translateX(20vw); }
-      50% { transform: translateY(-60vh) translateX(-20vw); }
-      75% { transform: translateY(-90vh) translateX(15vw); }
-      100% { transform: translateY(-120vh) translateX(0); }
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-120vh) translateX(30px) rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
-  <div class="balloons" id="balloonsContainer"></div>
 
+  <!-- 🎂 Card Start -->
   <div class="card">
     <div class="slideshow">
       <img src="download.png" class="active" alt="BF Pic 1">
@@ -171,20 +156,22 @@
     <h1>Happy Birthday Dear!</h1>
     <div class="love-text">I Love You ❤️</div>
 
+    <!-- Question 1 -->
     <div class="question">Do you love me?</div>
     <button onclick="answerLove('yes')">Yes</button>
     <button onclick="answerLove('no')">No</button>
     <div id="loveResponse" class="response"></div>
 
+    <!-- Question 2 -->
     <div class="question" style="margin-top: 30px;">Will you marry me?</div>
     <button onclick="answerMarry('yes')">Yes</button>
     <button onclick="answerMarry('no')">No</button>
     <div id="marryResponse" class="response"></div>
   </div>
 
-  <audio id="birthdayMusic" src="birthday.mp3" autoplay loop></audio>
-
+  <!-- 🎈 Balloon Generator Script -->
   <script>
+    // Slideshow
     const images = document.querySelectorAll('.slideshow img');
     let current = 0;
     setInterval(() => {
@@ -215,36 +202,21 @@
       }
     }
 
+    // 🎈 Create random balloons
     function createBalloon() {
       const balloon = document.createElement('div');
-      balloon.className = 'balloon';
-      const animationType = Math.random();
-
-      if(animationType < 0.33) {
-        balloon.style.left = Math.random() * 100 + 'vw';
-        balloon.style.bottom = '-100px';
-        balloon.style.animation = `floatUp ${4 + Math.random() * 3}s linear forwards`;
-      } else if(animationType < 0.66) {
-        balloon.style.top = Math.random() * 100 + 'vh';
-        balloon.style.left = '-60px';
-        balloon.style.animation = `floatLeftToRight ${5 + Math.random() * 3}s linear forwards`;
-      } else {
-        balloon.style.left = Math.random() * 100 + 'vw';
-        balloon.style.bottom = '-100px';
-        balloon.style.animation = `floatZigzag ${6 + Math.random() * 2}s linear forwards`;
-      }
-
-      balloon.style.background = `radial-gradient(circle at 30% 30%, hsl(${Math.random() * 360}, 100%, 70%), hsl(${Math.random() * 360}, 100%, 80%))`;
-      balloon.style.opacity = Math.random() * 0.7 + 0.3;
-
-      document.getElementById('balloonsContainer').appendChild(balloon);
+      balloon.classList.add('balloon');
+      balloon.style.left = Math.random() * 100 + 'vw';
+      balloon.style.animationDuration = 7 + Math.random() * 5 + 's';
+      balloon.style.background = `radial-gradient(circle, hsl(${Math.random()*360}, 100%, 80%) 20%, hsl(${Math.random()*360}, 100%, 60%) 100%)`;
+      document.body.appendChild(balloon);
 
       setTimeout(() => {
         balloon.remove();
-      }, 10000);
+      }, 12000);
     }
 
-    setInterval(createBalloon, 400);
+    setInterval(createBalloon, 800);
   </script>
 </body>
 </html>
