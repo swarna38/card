@@ -12,25 +12,22 @@
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
-      overflow-y: auto;
+      overflow-x: hidden;
       position: relative;
     }
 
     .card {
       background: white;
-      width: 350px;
+      max-width: 360px;
+      margin: 50px auto;
       border-radius: 20px;
       box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      padding: 20px;
+      padding: 20px 20px 80px; /* নিচে প্যাডিং বাড়ানো হলো */
       text-align: center;
       position: relative;
       overflow: hidden;
-      height: auto;
-      z-index: 1;
+      z-index: 10;
     }
 
     .slideshow {
@@ -118,105 +115,128 @@
       margin-top: 10px;
     }
 
-    /* 🎈 Balloon Styles */
+    /* Balloon Styles */
     .balloon {
-      position: fixed;
-      bottom: -100px;
-      width: 50px;
-      height: 70px;
-      background: radial-gradient(circle, #ff69b4 20%, #ff1493 100%);
+      position: absolute;
+      width: 40px;
+      height: 55px;
+      background-color: rgba(255, 99, 132, 0.8);
       border-radius: 50% 50% 50% 50%;
-      animation: floatUp 10s linear infinite;
-      opacity: 0.8;
-      z-index: 0;
+      animation: float 10s linear infinite;
+      z-index: 1;
     }
 
-    @keyframes floatUp {
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 2px;
+      height: 15px;
+      background: #999;
+    }
+
+    @keyframes float {
       0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
       }
       100% {
-        transform: translateY(-120vh) translateX(30px) rotate(360deg);
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
       }
+    }
+
+    /* Different directions */
+    .left-right { animation: floatLR 12s linear infinite; }
+    .right-left { animation: floatRL 14s linear infinite; }
+
+    @keyframes floatLR {
+      0% { transform: translate(-50vw, 100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translate(50vw, -120vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes floatRL {
+      0% { transform: translate(50vw, 100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translate(-50vw, -120vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🎂 Card Start -->
-  <div class="card">
-    <div class="slideshow">
-      <img src="download.png" class="active" alt="BF Pic 1">
-      <img src="download1.png" alt="BF Pic 2">
-      <img src="download2.png" alt="BF Pic 3">
-      <img src="download3.png" alt="BF Pic 4">
-      <img src="download4.png" alt="BF Pic 5">
-    </div>
+<!-- 🎈 Balloons -->
+<div class="balloon" style="left: 10%;" ></div>
+<div class="balloon left-right" style="left: 30%; animation-delay: 2s;"></div>
+<div class="balloon right-left" style="left: 50%; animation-delay: 4s;"></div>
+<div class="balloon" style="left: 70%; animation-delay: 1s;"></div>
+<div class="balloon left-right" style="left: 90%; animation-delay: 3s;"></div>
 
-    <h1>Happy Birthday Dear!</h1>
-    <div class="love-text">I Love You ❤️</div>
-
-    <!-- Question 1 -->
-    <div class="question">Do you love me?</div>
-    <button onclick="answerLove('yes')">Yes</button>
-    <button onclick="answerLove('no')">No</button>
-    <div id="loveResponse" class="response"></div>
-
-    <!-- Question 2 -->
-    <div class="question" style="margin-top: 30px;">Will you marry me?</div>
-    <button onclick="answerMarry('yes')">Yes</button>
-    <button onclick="answerMarry('no')">No</button>
-    <div id="marryResponse" class="response"></div>
+<!-- 🎁 Main Card -->
+<div class="card">
+  <div class="slideshow">
+    <img src="download.png" class="active" alt="BF Pic 1">
+    <img src="download1.png" alt="BF Pic 2">
+    <img src="download2.png" alt="BF Pic 3">
+    <img src="download3.png" alt="BF Pic 4">
+    <img src="download4.png" alt="BF Pic 5">
   </div>
 
-  <!-- 🎈 Balloon Generator Script -->
-  <script>
-    // Slideshow
-    const images = document.querySelectorAll('.slideshow img');
-    let current = 0;
-    setInterval(() => {
-      images[current].classList.remove('active');
-      current = (current + 1) % images.length;
-      images[current].classList.add('active');
-    }, 2000);
+  <h1>Happy Birthday Dear!</h1>
+  <div class="love-text">I Love You ❤️</div>
 
-    function answerLove(ans) {
-      const loveResp = document.getElementById('loveResponse');
-      if(ans === 'yes') {
-        loveResp.textContent = "Love you more! 💖";
-        loveResp.style.color = '#e91e63';
-      } else {
-        loveResp.innerHTML = "😭 <span class='emoji'>😢</span>";
-        loveResp.style.color = '#555';
-      }
+  <div class="question">Do you love me?</div>
+  <button onclick="answerLove('yes')">Yes</button>
+  <button onclick="answerLove('no')">No</button>
+  <div id="loveResponse" class="response"></div>
+
+  <div class="question" style="margin-top: 30px;">Will you marry me?</div>
+  <button onclick="answerMarry('yes')">Yes</button>
+  <button onclick="answerMarry('no')">No</button>
+  <div id="marryResponse" class="response"></div>
+</div>
+
+<!-- 🎵 Background Music -->
+<audio id="birthdayMusic" loop>
+  <source src="birthday.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // Slideshow
+  const images = document.querySelectorAll('.slideshow img');
+  let current = 0;
+  setInterval(() => {
+    images[current].classList.remove('active');
+    current = (current + 1) % images.length;
+    images[current].classList.add('active');
+  }, 2000);
+
+  function answerLove(ans) {
+    const loveResp = document.getElementById('loveResponse');
+    if(ans === 'yes') {
+      loveResp.textContent = "Love you more! 💖";
+      loveResp.style.color = '#e91e63';
+    } else {
+      loveResp.innerHTML = "😭 <span class='emoji'>😢</span>";
+      loveResp.style.color = '#555';
     }
+  }
 
-    function answerMarry(ans) {
-      const marryResp = document.getElementById('marryResponse');
-      if(ans === 'yes') {
-        marryResp.textContent = "I can't wait to spend my life with you! 💍❤️";
-        marryResp.style.color = '#4caf50';
-      } else {
-        marryResp.innerHTML = "😢 <span class='emoji'>💔</span>";
-        marryResp.style.color = '#999';
-      }
+  function answerMarry(ans) {
+    const marryResp = document.getElementById('marryResponse');
+    if(ans === 'yes') {
+      marryResp.textContent = "I can't wait to spend my life with you! 💍❤️";
+      marryResp.style.color = '#4caf50';
+    } else {
+      marryResp.innerHTML = "😢 <span class='emoji'>💔</span>";
+      marryResp.style.color = '#999';
     }
+  }
 
-    // 🎈 Create random balloons
-    function createBalloon() {
-      const balloon = document.createElement('div');
-      balloon.classList.add('balloon');
-      balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.animationDuration = 7 + Math.random() * 5 + 's';
-      balloon.style.background = `radial-gradient(circle, hsl(${Math.random()*360}, 100%, 80%) 20%, hsl(${Math.random()*360}, 100%, 60%) 100%)`;
-      document.body.appendChild(balloon);
-
-      setTimeout(() => {
-        balloon.remove();
-      }, 12000);
-    }
-
-    setInterval(createBalloon, 800);
-  </script>
+  // Music auto play when user clicks anywhere
+  document.body.addEventListener('click', () => {
+    const music = document.getElementById('birthdayMusic');
+    music.play();
+  }, { once: true });
+</script>
 </body>
 </html>
