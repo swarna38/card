@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Birthday Card for My Love</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      background: linear-gradient(135deg, #fbc7c7, #fceabb);
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      width: 350px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .slideshow {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 5px solid #fbc7c7;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(255,105,180,0.5);
+      position: relative;
+    }
+
+    .slideshow img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slideshow img.active {
+      opacity: 1;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #ff4081;
+      font-size: 2.5em;
+      margin: 0 0 10px 0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); color: #ff4081; }
+      50% { transform: scale(1.1); color: #e040fb; }
+    }
+
+    .love-text {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #ff3366;
+      animation: loveGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes loveGlow {
+      0%, 100% { text-shadow: 0 0 10px #ff3366; }
+      50% { text-shadow: 0 0 20px #ff6699, 0 0 30px #ff3366; }
+    }
+
+    .question {
+      font-weight: bold;
+      margin: 15px 0 10px;
+      font-size: 1.1em;
+    }
+
+    button {
+      background: #ff4081;
+      border: none;
+      padding: 10px 25px;
+      margin: 10px 5px;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(255,64,129,0.4);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e040fb;
+    }
+
+    .response {
+      margin-top: 15px;
+      font-size: 1.3em;
+      min-height: 40px;
+    }
+
+    .emoji {
+      font-size: 2.5em;
+      margin-top: 10px;
+    }
+
+    .balloons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #ff5f6d, #ffc371);
+      border-radius: 50% 50% 45% 45%;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+
+    @keyframes floatLeftToRight {
+      0% { transform: translateX(-100vw); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100vw); opacity: 0; }
+    }
+
+    @keyframes floatZigzag {
+      0% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-30vh) translateX(20vw); }
+      50% { transform: translateY(-60vh) translateX(-20vw); }
+      75% { transform: translateY(-90vh) translateX(15vw); }
+      100% { transform: translateY(-120vh) translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="balloons" id="balloonsContainer"></div>
+
+  <div class="card">
+    <div class="slideshow">
+      <img src="download.png" class="active" alt="BF Pic 1">
+      <img src="download1.png" alt="BF Pic 2">
+      <img src="download2.png" alt="BF Pic 3">
+      <img src="download3.png" alt="BF Pic 4">
+      <img src="download4.png" alt="BF Pic 5">
+    </div>
+
+    <h1>Happy Birthday Dear!</h1>
+    <div class="love-text">I Love You ❤️</div>
+
+    <div class="question">Do you love me?</div>
+    <button onclick="answerLove('yes')">Yes</button>
+    <button onclick="answerLove('no')">No</button>
+    <div id="loveResponse" class="response"></div>
+
+    <div class="question" style="margin-top: 30px;">Will you marry me?</div>
+    <button onclick="answerMarry('yes')">Yes</button>
+    <button onclick="answerMarry('no')">No</button>
+    <div id="marryResponse" class="response"></div>
+  </div>
+
+  <audio id="birthdayMusic" src="birthday.mp3" autoplay loop></audio>
+
+  <script>
+    const images = document.querySelectorAll('.slideshow img');
+    let current = 0;
+    setInterval(() => {
+      images[current].classList.remove('active');
+      current = (current + 1) % images.length;
+      images[current].classList.add('active');
+    }, 2000);
+
+    function answerLove(ans) {
+      const loveResp = document.getElementById('loveResponse');
+      if(ans === 'yes') {
+        loveResp.textContent = "Love you more! 💖";
+        loveResp.style.color = '#e91e63';
+      } else {
+        loveResp.innerHTML = "😭 <span class='emoji'>😢</span>";
+        loveResp.style.color = '#555';
+      }
+    }
+
+    function answerMarry(ans) {
+      const marryResp = document.getElementById('marryResponse');
+      if(ans === 'yes') {
+        marryResp.textContent = "I can't wait to spend my life with you! 💍❤️";
+        marryResp.style.color = '#4caf50';
+      } else {
+        marryResp.innerHTML = "😢 <span class='emoji'>💔</span>";
+        marryResp.style.color = '#999';
+      }
+    }
+
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      const animationType = Math.random();
+
+      if(animationType < 0.33) {
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.bottom = '-100px';
+        balloon.style.animation = `floatUp ${4 + Math.random() * 3}s linear forwards`;
+      } else if(animationType < 0.66) {
+        balloon.style.top = Math.random() * 100 + 'vh';
+        balloon.style.left = '-60px';
+        balloon.style.animation = `floatLeftToRight ${5 + Math.random() * 3}s linear forwards`;
+      } else {
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.bottom = '-100px';
+        balloon.style.animation = `floatZigzag ${6 + Math.random() * 2}s linear forwards`;
+      }
+
+      balloon.style.background = `radial-gradient(circle at 30% 30%, hsl(${Math.random() * 360}, 100%, 70%), hsl(${Math.random() * 360}, 100%, 80%))`;
+      balloon.style.opacity = Math.random() * 0.7 + 0.3;
+
+      document.getElementById('balloonsContainer').appendChild(balloon);
+
+      setTimeout(() => {
+        balloon.remove();
+      }, 10000);
+    }
+
+    setInterval(createBalloon, 400);
+  </script>
+</body>
+</html>
